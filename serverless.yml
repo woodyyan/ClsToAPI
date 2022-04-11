@@ -24,7 +24,7 @@ inputs:
   retryNum: 0
   runtime: Python3.6
   src: ./
-  timeout: 10
+  timeout: 30
   type: event
 name: ap-chengdu_default_ClsToAPI
 org: '1307427535'

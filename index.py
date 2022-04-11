@@ -16,6 +16,8 @@ URL = os.getenv("URL")
 
 
 def send_data(records):
+    logger.info("Records count: %s" % len(records))
+
     headers = {
         'Content-Type': 'application/json',
         'X-API-Key': API_Key
