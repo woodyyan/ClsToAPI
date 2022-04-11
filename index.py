@@ -21,6 +21,7 @@ def send_data(records):
         'X-API-Key': API_Key
     }
 
+    # if need, add some retry logic
     for record in records:
         payload = json.dumps(record)
         response = requests.request("POST", URL, headers=headers, data=payload)
