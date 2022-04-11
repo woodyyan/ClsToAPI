@@ -6,7 +6,7 @@ inputs:
   environment:
     variables:
       API_Key: 123
-      URL: topic
+      URL: https://enk885gn0j1qox.m.pipedream.net
   events:
     - cls:
         parameters:

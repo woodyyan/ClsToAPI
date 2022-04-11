@@ -15,7 +15,8 @@ API_Key = os.getenv("API_Key")
 URL = os.getenv("URL")
 
 
-def send_data(records):
+def send_data(content):
+    records = content['records']
     logger.info("Records count: %s" % len(records))
 
     headers = {
@@ -39,5 +40,5 @@ def main_handler(event, context):
     data = gzip.decompress(debase).decode()
     logger.info(data)
 
-    send_data(data)
+    send_data(json.loads(data))
     return 'success'
