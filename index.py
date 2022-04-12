@@ -24,12 +24,10 @@ def send_data(content):
         'X-API-Key': API_Key
     }
 
-    # if need, add some retry logic
-    for record in records:
-        payload = json.dumps(record)
-        response = requests.request("POST", URL, headers=headers, data=payload)
-        logger.info(response.status_code)
-        logger.info(response.text)
+    payload = json.dumps(records)
+    response = requests.request("POST", URL, headers=headers, data=payload)
+    logger.info(response.status_code)
+    logger.info(response.text)
 
 
 def main_handler(event, context):
