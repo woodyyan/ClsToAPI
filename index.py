@@ -13,9 +13,11 @@ logger.setLevel(logging.INFO)
 
 API_Key = os.getenv("API_Key")
 URL = os.getenv("URL")
+SPLUNK_URL = os.getenv("SPLUNK_URL")
+SPLUNK_TOKEN = os.getenv("SPLUNK_TOKEN")
 
 
-def send_data(content):
+def send_data_to_api(content):
     records = content['records']
     logger.info("Records count: %s" % len(records))
 
@@ -30,6 +32,28 @@ def send_data(content):
     logger.info(response.text)
 
 
+def send_data_to_splunk(content):
+    records = content['records']
+    logger.info("Start to send to splunk")
+
+    headers = {
+        'Authorization': 'Splunk ' + SPLUNK_TOKEN,
+        'Content-Type': 'application/json'
+    }
+
+    payload = ""
+    for record in records:
+        event = {
+            # "sourcetype": "_json",
+            "event": record
+        }
+        payload += json.dumps(event)
+
+    response = requests.request("POST", SPLUNK_URL, headers=headers, data=payload)
+    logger.info(response.status_code)
+    logger.info(response.text)
+
+
 def main_handler(event, context):
     logger.debug("start main_handler")
     logger.info(event)
@@ -38,5 +62,10 @@ def main_handler(event, context):
     data = gzip.decompress(debase).decode()
     logger.info(data)
 
-    send_data(json.loads(data))
+    content = json.loads(data)
+    send_data_to_api(content)
+
+    if SPLUNK_URL and SPLUNK_TOKEN:
+        send_data_to_splunk(content)
+
     return 'success'
