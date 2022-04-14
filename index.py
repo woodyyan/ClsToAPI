@@ -49,6 +49,7 @@ def send_request(url, headers, payload):
     logger.info(response.status_code)
     logger.info(response.text)
     logger.info('End http request：' + time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
+    response.raise_for_status()
 
 
 def send_data_to_splunk(content):
