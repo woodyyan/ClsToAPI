@@ -15,6 +15,8 @@ API_Key = os.getenv("API_Key")
 URL = os.getenv("URL")
 SPLUNK_URL = os.getenv("SPLUNK_URL")
 SPLUNK_TOKEN = os.getenv("SPLUNK_TOKEN")
+SPLUNK_SOURCETYPE = os.getenv("SPLUNK_SOURCETYPE")
+SPLUNK_INDEX = os.getenv("SPLUNK_INDEX")
 
 
 def send_data_to_api(content):
@@ -44,12 +46,15 @@ def send_data_to_splunk(content):
     payload = ""
     for record in records:
         event = {
-            # "sourcetype": "_json",
+            "sourcetype": SPLUNK_SOURCETYPE,
             "event": record
         }
         payload += json.dumps(event)
 
-    response = requests.request("POST", SPLUNK_URL, headers=headers, data=payload)
+    url = SPLUNK_URL
+    if SPLUNK_INDEX:
+        url = url + "?index=" + SPLUNK_INDEX
+    response = requests.request("POST", url, headers=headers, data=payload)
     logger.info(response.status_code)
     logger.info(response.text)
 
