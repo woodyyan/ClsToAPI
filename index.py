@@ -5,8 +5,11 @@ import gzip
 import json
 import logging
 import os
+import time
 
 import requests as requests
+from requests.adapters import HTTPAdapter
+from urllib3 import Retry
 
 logger = logging.getLogger('scf')
 logger.setLevel(logging.INFO)
@@ -29,9 +32,23 @@ def send_data_to_api(content):
     }
 
     payload = json.dumps(records)
-    response = requests.request("POST", URL, headers=headers, data=payload)
+
+    send_request(URL, headers, payload)
+
+
+def send_request(url, headers, payload):
+    logger.info('Start http request：' + time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
+    s = requests.Session()
+    retries = Retry(total=8,
+                    backoff_factor=0.1,
+                    allowed_methods=frozenset(['GET', 'POST']),
+                    status_forcelist=[500, 502, 503, 504])
+    s.mount('https://', HTTPAdapter(max_retries=retries))
+    s.mount('http://', HTTPAdapter(max_retries=retries))
+    response = s.post(url, headers=headers, data=payload, timeout=10)
     logger.info(response.status_code)
     logger.info(response.text)
+    logger.info('End http request：' + time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
 
 
 def send_data_to_splunk(content):
@@ -54,9 +71,8 @@ def send_data_to_splunk(content):
     url = SPLUNK_URL
     if SPLUNK_INDEX:
         url = url + "?index=" + SPLUNK_INDEX
-    response = requests.request("POST", url, headers=headers, data=payload)
-    logger.info(response.status_code)
-    logger.info(response.text)
+
+    send_request(url, headers, payload)
 
 
 def main_handler(event, context):
