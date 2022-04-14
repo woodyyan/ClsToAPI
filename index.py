@@ -41,7 +41,7 @@ def send_request(url, headers, payload):
     s = requests.Session()
     retries = Retry(total=8,
                     backoff_factor=0.1,
-                    allowed_methods=frozenset(['GET', 'POST']),
+                    method_whitelist=frozenset(['GET', 'POST']),
                     status_forcelist=[500, 502, 503, 504])
     s.mount('https://', HTTPAdapter(max_retries=retries))
     s.mount('http://', HTTPAdapter(max_retries=retries))
