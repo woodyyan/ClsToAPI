@@ -38,6 +38,7 @@ def send_data_to_api(content):
 
 def send_request(url, headers, payload):
     logger.info('Start http request：' + time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
+    logger.info(payload)
     s = requests.Session()
     retries = Retry(total=8,
                     backoff_factor=0.1,
