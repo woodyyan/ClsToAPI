@@ -7,7 +7,7 @@ inputs:
     variables:
       API_Key: 123
       URL: https://enk885gn0j1qox.m.pipedream.net
-      SPLUNK_URL: http://159.75.189.66:8088/services/collector
+      SPLUNK_URL: http://159.75.189.66:8088/services/collector/raw
       SPLUNK_TOKEN: 123
       SPLUNK_SOURCETYPE: tencent_json
       SPLUNK_INDEX: techops-cdn
