@@ -53,8 +53,8 @@ def send_request(url, headers, payload):
     response.raise_for_status()
 
 
-def send_data_to_splunk(content):
-    records = content['records']
+def send_data_to_splunk(data):
+    records = data['records']
     logger.info("Start to send to splunk")
 
     headers = {
@@ -64,7 +64,10 @@ def send_data_to_splunk(content):
 
     payload = ""
     for record in records:
-        payload += json.dumps(record)
+        content = record['content']
+        json_content = json.loads(content)
+        print(json_content)
+        payload += json.dumps(json_content) + '\n'
 
     url = SPLUNK_URL
     if SPLUNK_INDEX and SPLUNK_SOURCETYPE:
