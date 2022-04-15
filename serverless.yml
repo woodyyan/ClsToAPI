@@ -9,7 +9,7 @@ inputs:
       URL: https://enk885gn0j1qox.m.pipedream.net
       SPLUNK_URL: http://159.75.189.66:8088/services/collector
       SPLUNK_TOKEN: 123
-      SPLUNK_SOURCETYPE: CDN_json
+      SPLUNK_SOURCETYPE: tencent_json
       SPLUNK_INDEX: techops-cdn
   events:
     - cls:

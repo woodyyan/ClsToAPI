@@ -63,15 +63,11 @@ def send_data_to_splunk(content):
 
     payload = ""
     for record in records:
-        event = {
-            "sourcetype": SPLUNK_SOURCETYPE,
-            "event": record
-        }
-        payload += json.dumps(event)
+        payload += json.dumps(record)
 
     url = SPLUNK_URL
-    if SPLUNK_INDEX:
-        url = url + "?index=" + SPLUNK_INDEX
+    if SPLUNK_INDEX and SPLUNK_SOURCETYPE:
+        url = url + "?index=" + SPLUNK_INDEX + "&sourcetype=" + SPLUNK_SOURCETYPE
 
     send_request(url, headers, payload)
 
