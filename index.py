@@ -26,13 +26,23 @@ def send_data_to_api(content):
     records = content['records']
     logger.info("Records count: %s" % len(records))
 
+    if len(records) == 0:
+        logger.info("No data to write. Records are empty.")
+        return
+
     headers = {
         'Content-Type': 'application/json',
         'X-API-Key': API_Key
     }
 
-    payload = json.dumps(records)
+    json_payload = []
+    for record in records:
+        content = record['content']
+        json_content = json.loads(content)
+        print(json_content)
+        json_payload.append(json_content)
 
+    payload = json.dumps(json_payload)
     send_request(URL, headers, payload)
 
 
@@ -55,6 +65,10 @@ def send_request(url, headers, payload):
 
 def send_data_to_splunk(data):
     records = data['records']
+    if len(records) == 0:
+        logger.info("No data to write. Records are empty.")
+        return
+
     logger.info("Start to send to splunk")
 
     headers = {
