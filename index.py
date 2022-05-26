@@ -39,6 +39,8 @@ def send_data_to_api(content):
     for record in records:
         content = record['content']
         json_content = json.loads(content)
+        if 'timestamp' in record:
+            json_content['timestamp'] = record['timestamp']
         print(json_content)
         json_payload.append(json_content)
 
@@ -80,6 +82,8 @@ def send_data_to_splunk(data):
     for record in records:
         content = record['content']
         json_content = json.loads(content)
+        if 'timestamp' in record:
+            json_content['timestamp'] = record['timestamp']
         print(json_content)
         payload += json.dumps(json_content) + '\n'
 
